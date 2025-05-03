@@ -15,30 +15,30 @@ if (process.env.NODE_ENV === 'production') {
   nextConfig.output = 'export';
   
   // Define specific static paths to generate
-  nextConfig.exportPathMap = async function (defaultPathMap) {
-    return {
-      // Core routes
-      '/': { page: '/' },
+  // nextConfig.exportPathMap = async function (defaultPathMap) {
+  //   return {
+  //     // Core routes
+  //     '/': { page: '/' },
       
-      // Download placeholder - will be used for all downloads
-      '/download/placeholder/': { 
-        page: '/download/[shareLink]', 
-        query: { shareLink: 'placeholder' } 
-      },
+  //     // Download placeholder - will be used for all downloads
+  //     '/download/placeholder/': { 
+  //       page: '/download/[shareLink]', 
+  //       query: { shareLink: 'placeholder' } 
+  //     },
       
-      // Short download path placeholder - for /d/[shareLink]
-      '/d/placeholder/': { 
-        page: '/d/[shareLink]', 
-        query: { shareLink: 'placeholder' } 
-      },
+  //     // Short download path placeholder - for /d/[shareLink]
+  //     '/d/placeholder/': { 
+  //       page: '/d/[shareLink]', 
+  //       query: { shareLink: 'placeholder' } 
+  //     },
       
-      // Share placeholder - will be used for all share links
-      '/share/placeholder/': { 
-        page: '/share/[shareLink]', 
-        query: { shareLink: 'placeholder' } 
-      },
-    };
-  };
+  //     // Share placeholder - will be used for all share links
+  //     '/share/placeholder/': { 
+  //       page: '/share/[shareLink]', 
+  //       query: { shareLink: 'placeholder' } 
+  //     },
+  //   };
+  // };
 }
 
 // These rewrites will only apply during development
