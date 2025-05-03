@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground: #171717;
+  --background: #f5f5f5;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+/* Improved text contrast */
+h1, h2, h3, h4, h5, h6 {
+  color: #111827;
+  font-weight: 600;
+}
+
+p, span, div {
+  color: #374151;
+}
+
+/* Better link styling */
+a, button, [role="button"] {
+  cursor: pointer;
+}
+
+a:hover, button:hover, [role="button"]:hover {
+  opacity: 0.8;
+}
+
+/* Ensuring all buttons with blue background have white text */
+button[class*="bg-blue"], 
+button[class*="bg-primary"],
+button[class*="bg-gradient"],
+button[class*="from-blue"] {
+  color: white !important;
+}
+
+button[class*="bg-blue"] *, 
+button[class*="bg-primary"] *,
+button[class*="bg-gradient"] *,
+button[class*="from-blue"] * {
+  color: white !important;
+}
+
+/* Improving visibility of text elements */
+.text-gray-500 {
+  color: #6b7280 !important;
+}
+
+.text-gray-400 {
+  color: #4b5563 !important;
+}
+
+.text-gray-300 {
+  color: #374151 !important;
+}
+
+/* Center content container */
+.container-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Custom button glow effects */
+.btn-glow {
+  position: relative;
+}
+
+.btn-glow:hover::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  background: linear-gradient(45deg, #3b82f6, #4f46e5, #4f46e5, #3b82f6);
+  border-radius: 0.5rem;
+  z-index: -1;
+  filter: blur(8px);
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+.btn-glow-red:hover::before {
+  background: linear-gradient(45deg, #ef4444, #ec4899, #ec4899, #ef4444);
+}
+
+.btn-glow-purple:hover::before {
+  background: linear-gradient(45deg, #8b5cf6, #6366f1, #6366f1, #8b5cf6);
+}
+
+/* Fancy progress bar animation */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.progress-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: shimmer 2s infinite;
+}

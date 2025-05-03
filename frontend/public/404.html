@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Redirecting...</title>
+  <script>
+    // Single Page Apps for GitHub Pages or static hosts
+    // This script redirects from 404.html to the index.html page with the original URL
+    // captured in the query string.
+    // This solves the issue of client-side routing not working with static hosting.
+    
+    // Get the path from the URL
+    var path = window.location.pathname;
+    
+    // Redirect to the index page with the path in a query parameter
+    window.location.href = '/?' + 
+      (path.length > 0 ? 'route=' + encodeURIComponent(path.substring(1)) : '');
+  </script>
+</head>
+<body>
+  <h1>Redirecting...</h1>
+  <p>If you are not automatically redirected, <a href="/">click here</a>.</p>
+</body>
+</html> 
