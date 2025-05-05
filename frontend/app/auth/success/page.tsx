@@ -13,7 +13,7 @@ export default function AuthSuccessPage() {
   const [loginProcessed, setLoginProcessed] = useState(false);
   
   useEffect(() => {
-    const token = searchParams.get('token');
+    const token = searchParams?.get('token') || null;
     console.log('Auth success page loaded, token:', token ? 'Token present' : 'No token');
     
     if (loginProcessed) return;
