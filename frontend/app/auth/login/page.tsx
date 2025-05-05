@@ -24,7 +24,7 @@ export default function LoginPage() {
   
   // Check for token in URL (after OAuth redirect)
   useEffect(() => {
-    const token = searchParams.get('token');
+    const token = searchParams?.get('token');
     if (token) {
       console.log('Token found in URL, handling login');
       handleLoginWithToken(token);
