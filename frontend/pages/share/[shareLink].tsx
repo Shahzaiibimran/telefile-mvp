@@ -35,7 +35,7 @@ export default function DirectSharePage() {
     if (!router.isReady) return;
     
     // Extract shareLink from either query or URL
-    let actualShareLink = shareLink;
+    let actualShareLink = typeof shareLink === 'string' ? shareLink : 'placeholder';
     
     // If placeholder, try to get the actual share ID from URL
     if (actualShareLink === 'placeholder') {

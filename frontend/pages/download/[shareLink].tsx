@@ -264,7 +264,7 @@ export default function DownloadPage() {
               toast({
                 title: `Chunk ${i+1} Failed`,
                 description: 'Part of the file could not be downloaded. The file may be incomplete.',
-                variant: 'warning',
+                variant: 'destructive',
               });
             }
           } catch (retryError) {
@@ -274,7 +274,7 @@ export default function DownloadPage() {
             toast({
               title: `Chunk ${i+1} Failed`,
               description: 'Part of the file could not be downloaded. The file may be incomplete.',
-              variant: 'warning',
+              variant: 'destructive',
             });
           }
         }

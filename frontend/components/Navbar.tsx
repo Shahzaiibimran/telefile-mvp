@@ -134,7 +134,7 @@ const Navbar: React.FC = () => {
                 <Link 
                   href="/admin" 
                   className={`flex items-center space-x-1 text-sm font-medium transition-colors ${
-                    pathname.startsWith('/admin') 
+                    pathname?.startsWith('/admin') 
                       ? 'text-primary font-semibold' 
                       : 'text-gray-700 hover:text-primary'
                   }`}

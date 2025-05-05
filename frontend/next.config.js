@@ -12,7 +12,7 @@ const nextConfig = {
 // Only apply static export configuration when building for production
 // This prevents CSS issues during development
 if (process.env.NODE_ENV === 'production') {
-  nextConfig.output = 'export';
+  //nextConfig.output = 'export';
   
   // Define specific static paths to generate
   // nextConfig.exportPathMap = async function (defaultPathMap) {
