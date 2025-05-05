@@ -66,7 +66,7 @@ const Navbar: React.FC = () => {
   }
 
   // Show simplified navbar for public download pages
-  if (pathname.startsWith('/download') || pathname.startsWith('/d/')) {
+  if (pathname && (pathname.startsWith('/download') || pathname.startsWith('/d/'))) {
     return (
       <header className="sticky top-0 z-50 w-full bg-white border-b shadow-sm">
         <div className="container flex items-center justify-between h-16 px-4 mx-auto">
