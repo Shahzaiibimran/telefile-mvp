@@ -3,11 +3,13 @@ import jwt from 'jsonwebtoken';
 import User, { IUser } from '../models/User';
 import { authConfig } from '../config/auth';
 
+interface AuthenticatedRequest extends Request {
+  user: IUser;
+  userId: string;
+}
+
 interface JwtPayload {
   userId: string;
-  // Add other claims if needed
-  iat?: number;
-  exp?: number;
 }
 
 /**
@@ -26,11 +28,10 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 
     try {
       // Verify token
-      // @ts-ignore - JWT verify has complex typings that are hard to satisfy
       const decoded = jwt.verify(token, authConfig.jwtSecret) as JwtPayload;
       
       // Find user by id
-      const user = await User.findById(decoded.userId);
+      const user = await User.findById(decoded.userId).exec();
       
       if (!user) {
         console.log(`Authentication failed: User ID ${decoded.userId} not found`);
@@ -39,7 +40,8 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
       }
       
       // Add user to request
-      req.user = user;
+      // req.user = user;
+      (req as AuthenticatedRequest).user = user.toObject();
       req.userId = decoded.userId;
       
       next();
@@ -71,20 +73,22 @@ export const isAdmin = (req: Request, res: Response, next: NextFunction): void =
   console.log('Request method:', req.method);
   console.log('Request headers:', req.headers);
   
-  if (!req.user) {
+  const authReq = req as AuthenticatedRequest;
+
+  if (!authReq.user) {
     console.error('Access denied: No user in request');
     res.status(403).json({ message: 'Access denied, admin rights required' });
     return;
   }
   
-  const user = req.user as IUser;
+  const user = authReq.user as IUser;
 
   // Explicitly check is_admin flag type and value
   const isAdminFlag = user.is_admin;
-  console.log(`Admin check for user ${req.user.email}:`);
+  console.log(`Admin check for user ${user.email}:`);
   console.log(`- is_admin value: ${isAdminFlag}`);
   console.log(`- is_admin type: ${typeof isAdminFlag}`);
-  console.log(`- Full user object:`, req.user);
+  console.log(`- Full user object:`, user);
   
   // Check different potential values to catch edge cases
   const isAdminBoolean = Boolean(isAdminFlag);
@@ -93,12 +97,12 @@ export const isAdmin = (req: Request, res: Response, next: NextFunction): void =
   console.log(`- is_admin as string: ${isAdminString}`);
   
   if (!isAdminFlag) {
-    console.error(`Access denied: User ${req.user.email} is not an admin`);
+    console.error(`Access denied: User ${user.email} is not an admin`);
     res.status(403).json({ message: 'Access denied, admin rights required' });
     return;
   }
   
   // User is admin, proceed
-  console.log(`Admin access granted for ${req.user.email}`);
+  console.log(`Admin access granted for ${user.email}`);
   next();
 }; 
