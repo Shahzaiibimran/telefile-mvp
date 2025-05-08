@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import User, { IUser } from '../models/User';
 import { authConfig } from '../config/auth';
 
-interface AuthenticatedRequest extends Request {
+export interface AuthenticatedRequest extends Request {
   user: IUser;
   userId: string;
 }
@@ -31,7 +31,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
       const decoded = jwt.verify(token, authConfig.jwtSecret) as JwtPayload;
       
       // Find user by id
-      const user = await User.findById(decoded.userId).exec();
+      const user = await User.findById(decoded.userId).lean().exec();
       
       if (!user) {
         console.log(`Authentication failed: User ID ${decoded.userId} not found`);
@@ -41,8 +41,9 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
       
       // Add user to request
       // req.user = user;
-      (req as AuthenticatedRequest).user = user.toObject();
-      req.userId = decoded.userId;
+      const authReq = req as AuthenticatedRequest;
+      authReq.user = user;
+      authReq.userId = decoded.userId;
       
       next();
     } catch (error) {
@@ -81,7 +82,7 @@ export const isAdmin = (req: Request, res: Response, next: NextFunction): void =
     return;
   }
   
-  const user = authReq.user as IUser;
+  const user = authReq.user;
 
   // Explicitly check is_admin flag type and value
   const isAdminFlag = user.is_admin;
