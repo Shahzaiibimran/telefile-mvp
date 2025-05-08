@@ -16,6 +16,7 @@ const connectDB = async (): Promise<void> => {
       serverSelectionTimeoutMS: 5000, // Timeout for server selection
       connectTimeoutMS: 10000,       // Timeout for initial connection
       socketTimeoutMS: 45000,        // Timeout for operations
+      family: 4 // Forces IPv4
     };
     
     await mongoose.connect(mongoURI, options);
