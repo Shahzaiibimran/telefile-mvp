@@ -4,6 +4,7 @@ import * as fileService from '../services/fileService';
 import { IUser } from '../models/User';
 import FileChunk from '../models/FileChunk';
 import s3 from '../config/storage';
+import { AuthenticatedRequest } from '../middleware/auth';
 
 /**
  * Initialize file upload
@@ -12,7 +13,9 @@ export const initializeUpload = async (req: Request, res: Response): Promise<voi
   try {
     const { fileName, fileSize, mimeType, expiryDays } = req.body;
     
-    if (!req.user) {
+    const authReq = req as AuthenticatedRequest;
+
+    if (!authReq.user) {
       res.status(401).json({ message: 'User not authenticated' });
       return;
     }
@@ -23,7 +26,7 @@ export const initializeUpload = async (req: Request, res: Response): Promise<voi
     }
     
     // Type assertion for req.user to access _id
-    const user = req.user as IUser;
+    const user = authReq.user;
     
     const file = await fileService.initializeFileUpload(
       user._id.toString(),
@@ -243,15 +246,17 @@ export const getFileDownload = async (req: Request, res: Response): Promise<void
  */
 export const getUserFiles = async (req: Request, res: Response): Promise<void> => {
   try {
-    if (!req.user) {
+    const authReq = req as AuthenticatedRequest;
+
+    if (!authReq.user) {
       res.status(401).json({ message: 'User not authenticated' });
       return;
     }
     
     // Type assertion for req.user to access _id
-    const user = req.user as IUser;
+    const user = authReq.user;
     
-    const files = await File.find({ user: user._id })
+    const files = await File.find({ user: user._id.toString() })
       .sort({ created_at: -1 });
     
     res.json({ files });
@@ -268,7 +273,9 @@ export const deleteFile = async (req: Request, res: Response): Promise<void> => 
   try {
     const { fileId } = req.params;
     
-    if (!req.user) {
+    const authReq = req as AuthenticatedRequest;
+
+    if (!authReq.user) {
       res.status(401).json({ message: 'User not authenticated' });
       return;
     }
@@ -279,7 +286,7 @@ export const deleteFile = async (req: Request, res: Response): Promise<void> => 
     }
     
     // Type assertion for req.user to access _id
-    const user = req.user as IUser;
+    const user = authReq.user;
     
     await fileService.deleteFile(fileId, user._id.toString());
     
@@ -307,7 +314,9 @@ export const cancelUpload = async (req: Request, res: Response): Promise<void> =
     const { fileId } = req.body;
     console.log('Cancel upload request received for fileId:', fileId);
     
-    if (!req.user) {
+    const authReq = req as AuthenticatedRequest;
+
+    if (!authReq.user) {
       console.log('Cancel upload failed: User not authenticated');
       res.status(401).json({ message: 'User not authenticated' });
       return;
@@ -320,7 +329,7 @@ export const cancelUpload = async (req: Request, res: Response): Promise<void> =
     }
     
     // Type assertion for req.user to access _id
-    const user = req.user as IUser;
+    const user = authReq.user;
     console.log(`User ${user._id.toString()} attempting to cancel file ${fileId}`);
     
     await fileService.cancelFileUpload(fileId, user._id.toString());
