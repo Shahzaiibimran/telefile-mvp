@@ -2,6 +2,7 @@ import mongoose, { Document, Schema } from 'mongoose';
 import { IUser } from './User';
 
 export interface IFile extends Document {
+  _id: mongoose.Types.ObjectId;
   name: string;
   size: number;
   user: IUser['_id'];

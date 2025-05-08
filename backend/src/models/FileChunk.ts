@@ -2,6 +2,7 @@ import mongoose, { Document, Schema } from 'mongoose';
 import { IFile } from './File';
 
 export interface IFileChunk extends Document {
+  _id: mongoose.Types.ObjectId;
   file: IFile['_id'];
   chunk_index: number;
   storage_path: string;

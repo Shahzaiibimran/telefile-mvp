@@ -210,7 +210,7 @@ export const uploadChunkDirect = async (
 
       const params = {
         Bucket: storageConfig.bucketName,
-        Key: chunk.storage_path,
+        Key: chunk?.storage_path,
         Body: fileData,
         ContentType: multerFile.mimetype || 'application/octet-stream'
       };
@@ -237,7 +237,7 @@ export const uploadChunkDirect = async (
       
       // Update chunk status
       chunk = await FileChunk.findByIdAndUpdate(
-        chunk._id,
+        chunk?._id,
         { 
           is_uploaded: true,
           etag: uploadResult.ETag 
