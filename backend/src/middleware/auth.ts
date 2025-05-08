@@ -3,13 +3,11 @@ import jwt from 'jsonwebtoken';
 import User, { IUser } from '../models/User';
 import { authConfig } from '../config/auth';
 
-// Correct way to extend the Express Request type
-// Override the existing User type entirely
-declare global {
-  namespace Express {
-    // Completely replace the existing interface
-    interface User extends IUser {}
-  }
+interface JwtPayload {
+  userId: string;
+  // Add other claims if needed
+  iat?: number;
+  exp?: number;
 }
 
 /**
@@ -29,7 +27,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
     try {
       // Verify token
       // @ts-ignore - JWT verify has complex typings that are hard to satisfy
-      const decoded = jwt.verify(token, authConfig.jwtSecret) as { userId: string };
+      const decoded = jwt.verify(token, authConfig.jwtSecret) as JwtPayload;
       
       // Find user by id
       const user = await User.findById(decoded.userId);
@@ -79,8 +77,10 @@ export const isAdmin = (req: Request, res: Response, next: NextFunction): void =
     return;
   }
   
+  const user = req.user as IUser;
+
   // Explicitly check is_admin flag type and value
-  const isAdminFlag = req.user.is_admin;
+  const isAdminFlag = user.is_admin;
   console.log(`Admin check for user ${req.user.email}:`);
   console.log(`- is_admin value: ${isAdminFlag}`);
   console.log(`- is_admin type: ${typeof isAdminFlag}`);
